@@ -6,12 +6,12 @@ using namespace std;
 
 int main() {
     int hiddenShape[2] {4, 2};
-    Network net(2, hiddenShape, 1);
+    Network net(1, hiddenShape, 1);
 
-    for (MatrixXd &hidden : net.hiddens) {
-        cout << hidden << endl;
-        cout << "---------\n";
-    }
+    VectorXd inputs(1);
+    inputs << 2;
+
+    cout << net.forward(inputs) << "\n";
 
     return 0;
 }
