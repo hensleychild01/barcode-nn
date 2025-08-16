@@ -10,12 +10,13 @@ using namespace Eigen;
 namespace NeuralNetwork {
     class Network {
     public:
-        Vector2<double> inputs;
-        vector<Vector2<double>> hiddens;
-        Vector2<double> outputs;
+        int inputs;
+        vector<MatrixXd> hiddens;
+        VectorXd outputs;
+        int outputNum;
         double learningRate;
 
-        Network(int inputs, int hiddenShape[2], int outputs, double learningRate);
+        Network(int inputs, int hiddenShape[2], int outputs, double learningRate=0.0001);
     };
 }
 
