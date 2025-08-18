@@ -8,18 +8,17 @@ using namespace std;
 using namespace Eigen;
 
 namespace NeuralNetwork {
+    typedef Matrix<double, Dynamic, 1> LayerValues;
+
     class Network {
     public:
-        int inputs;
-        vector<MatrixXd> hiddenWeights;
-        MatrixXd hiddenBiases;
-        MatrixXd outputWeights;
-        VectorXd outputBiases;
+        int inputNum;
         int outputNum;
+        vector<MatrixXd> layers; // each matrix contains both weights and biases
         double learningRate;
 
-        Network(int inputs, int hiddenShape[2], int outputs, double learningRate=0.0001);
-        VectorXd forward(const VectorXd &input);
+        Network(int inputs, int outputs, int hiddenShape[2], double learningRate = 0.0001);
+        LayerValues forward(const LayerValues &input) const;
     };
 }
 

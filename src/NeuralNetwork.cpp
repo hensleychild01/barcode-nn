@@ -6,36 +6,31 @@ using namespace Eigen;
 using namespace std;
 
 namespace NeuralNetwork {
-    Network::Network(const int inputs, int hiddenShape[2], const int outputs, const double learningRate) :
-    inputs(inputs), outputNum(outputs), learningRate(learningRate) {
-        // hiddenShape depicts the hidden layers as they appear graphically, so
-        // hiddenShape[0] is the number of nodes per layer (rows), and
-        // hiddenShape[1] is the number of layers (columns)
+    Network::Network(const int inputs, const int outputs, int hiddenShape[2], const double learningRate) : inputNum(inputs), outputNum(outputs), learningRate(learningRate) {
+        const int hiddenLayerSize = hiddenShape[0];
+        const int hiddenLayerNum = hiddenShape[1];
 
-        // weights
-        for (int i = 0; i < hiddenShape[1]; i++) {
-            MatrixXd m = MatrixXd::Random(hiddenShape[0], i == 0 ? inputs : hiddenShape[0]);
-            this->hiddenWeights.emplace_back(m);
+        for (int i = 0; i < hiddenLayerNum; i++) {
+            const int inputsForThisLayer = i == 0 ? this->inputNum : hiddenLayerSize;
+            const MatrixXd m = MatrixXd::Random(hiddenLayerSize, inputsForThisLayer + 1); // +1 for biases :)
+            this->layers.push_back(m);
         }
 
-        // to simplify math later on, biases for each layer will be a 1-row vector
-        // in other words, this will have inverse dimensions of the hidden layers ??
-        this->hiddenBiases = MatrixXd::Zero(hiddenShape[1], hiddenShape[0]);
-
-        this->outputWeights = MatrixXd::Zero(this->outputNum, hiddenShape[0]);
-        this->outputBiases = VectorXd::Zero(this->outputNum);
+        // the output layer is calculated exactly the same as the hiddens, so I'm gonna try just including it in that list
+        this->layers.push_back(MatrixXd::Random(this->outputNum, hiddenLayerSize + 1));
     }
 
-    VectorXd Network::forward(const VectorXd &input) {
-        VectorXd lastLayer = input;
-        for (int i = 0; i < this->hiddenWeights.size(); i++) {
-            lastLayer *= this->hiddenWeights[i].transpose();
-            lastLayer += this->hiddenBiases.row(i);
+    LayerValues Network::forward(const LayerValues &input) const {
+        assert(input.rows() == this->inputNum);
+        // OKAY!
+        // so for each layer, we need to append a 1 to the bottom of the ?x1 input vector
+        LayerValues lastLayer = input;
+        for (MatrixXd layer : this->layers) {
+            LayerValues toForward;
+            toForward.resize(lastLayer.rows() + 1, 1);
+            toForward(toForward.rows() - 1, 0) = 1; // this should add in that pesky little 1 needed to add biases
+            lastLayer = layer * toForward;
         }
-
-        lastLayer *= this->outputWeights.transpose();
-        lastLayer += this->outputBiases;
-
         return lastLayer;
     }
 }

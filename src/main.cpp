@@ -5,12 +5,13 @@ using namespace NeuralNetwork;
 using namespace std;
 
 int main() {
-    int hiddenShape[2] {4, 2};
-    Network net(1, hiddenShape, 1);
+    int hiddenShape[2] = {256, 2};
+    const Network net(1, 1, hiddenShape);
 
-    VectorXd inputs(1);
-    inputs << 2;
+    LayerValues inputs(1, 1);
+    inputs << 1;
 
+    cout << inputs << "\n";
     cout << net.forward(inputs) << "\n";
 
     return 0;
