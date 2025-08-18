@@ -13,13 +13,14 @@ namespace NeuralNetwork {
     class Network {
     public:
         int inputNum;
-        int outputNum;
         vector<MatrixXd> layers; // each matrix contains both weights and biases
         double learningRate;
 
-        Network(int inputs, int outputs, int hiddenShape[2], double learningRate = 0.0001);
-        LayerValues forward(const LayerValues &input) const;
+        Network(int inputs, const int hiddenShape[2], double learningRate = 0.0001);
+        [[nodiscard]] double forward(const LayerValues &input) const;
     };
+
+    [[nodiscard]] double loss(double yhat, double y); // since an nnue only has one input, that's what I'll support here
 }
 
 #endif //NNUE_NEURALNETWORK_H

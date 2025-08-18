@@ -6,7 +6,7 @@ using namespace Eigen;
 using namespace std;
 
 namespace NeuralNetwork {
-    Network::Network(const int inputs, const int outputs, int hiddenShape[2], const double learningRate) : inputNum(inputs), outputNum(outputs), learningRate(learningRate) {
+    Network::Network(const int inputs, const int hiddenShape[2], const double learningRate) : inputNum(inputs), learningRate(learningRate) {
         const int hiddenLayerSize = hiddenShape[0];
         const int hiddenLayerNum = hiddenShape[1];
 
@@ -17,20 +17,24 @@ namespace NeuralNetwork {
         }
 
         // the output layer is calculated exactly the same as the hiddens, so I'm gonna try just including it in that list
-        this->layers.push_back(MatrixXd::Random(this->outputNum, hiddenLayerSize + 1));
+        // there will only be one output
+        this->layers.emplace_back(MatrixXd::Random(1, hiddenLayerSize + 1));
     }
 
-    LayerValues Network::forward(const LayerValues &input) const {
+    double Network::forward(const LayerValues &input) const {
         assert(input.rows() == this->inputNum);
         // OKAY!
         // so for each layer, we need to append a 1 to the bottom of the ?x1 input vector
         LayerValues lastLayer = input;
-        for (MatrixXd layer : this->layers) {
-            LayerValues toForward;
-            toForward.resize(lastLayer.rows() + 1, 1);
-            toForward(toForward.rows() - 1, 0) = 1; // this should add in that pesky little 1 needed to add biases
+        for (const MatrixXd& layer : this->layers) {
+            LayerValues toForward(lastLayer.rows() + 1, 1);
+            toForward << lastLayer, 1; // this should add in that pesky little 1 needed to add biases
             lastLayer = layer * toForward;
         }
-        return lastLayer;
+        return lastLayer(0, 0);
+    }
+
+    double loss(const double yhat, const double y) {
+        return pow((y-yhat), 2);
     }
 }
