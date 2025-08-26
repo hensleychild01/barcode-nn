@@ -5,8 +5,7 @@ using namespace NeuralNetwork;
 using namespace std;
 
 int main() {
-    int hiddenShape[2] = {256, 2};
-    const Network net(1, hiddenShape);
+    const Network net(1, 256, 2);
 
     LayerValues inputs(1, 1);
     inputs << 345;

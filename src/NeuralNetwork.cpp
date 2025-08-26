@@ -6,10 +6,7 @@ using namespace Eigen;
 using namespace std;
 
 namespace NeuralNetwork {
-    Network::Network(const int inputs, const int hiddenShape[2], const double learningRate) : inputNum(inputs), learningRate(learningRate) {
-        const int hiddenLayerSize = hiddenShape[0];
-        const int hiddenLayerNum = hiddenShape[1];
-
+    Network::Network(const int inputs, const int hiddenLayerSize, const int hiddenLayerNum, const double learningRate) : inputNum(inputs), learningRate(learningRate) {
         for (int i = 0; i < hiddenLayerNum; i++) {
             const int inputsForThisLayer = i == 0 ? this->inputNum : hiddenLayerSize;
             const MatrixXd m = MatrixXd::Random(hiddenLayerSize, inputsForThisLayer + 1); // +1 for biases :)

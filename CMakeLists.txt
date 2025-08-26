@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 4.0)
 
 project(nnue)
 
-set(EIGEN_DIR "D:/Coding/c++ libraries/eigen-3.4.0")
+set(EIGEN_DIR "C:\\Users\\hensl\\Desktop\\Coding\\cpp libraries\\eigen")
 
 include_directories(${EIGEN_DIR})
 

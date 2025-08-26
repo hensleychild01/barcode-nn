@@ -16,7 +16,7 @@ namespace NeuralNetwork {
         vector<MatrixXd> layers; // each matrix contains both weights and biases
         double learningRate;
 
-        Network(int inputs, const int hiddenShape[2], double learningRate = 0.0001);
+        Network(int inputs, int hiddenLayerSize, int hiddenLayerNum, double learningRate = 0.0001);
         [[nodiscard]] double forward(const LayerValues &input) const;
     };
 
